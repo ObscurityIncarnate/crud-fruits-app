@@ -36,10 +36,42 @@ app.get("/fruits/new", (req, res)=>{
     res.render("fruits/new");
     console.log("works")
 })
+app.get("/fruits", async (req, res)=>{
+    try {
+       const allFruits = await Fruit.find();
+        res.render("fruits/index",{
+            allFruits,
+        }); 
+    } catch (error) {
+        console.log("Failed to find all the fruits");
+        console.log(error);
+    }
+    
+})
 app.post("/fruits", async (req, res)=>{
     console.log(req.body   )
-    console.log(req.body.isReadyToEat)
+    req.body.isReadyToEat =  !!req.body.isReadyToEat;
     const newFruit = req.body;
+    console.log(newFruit)
+    Fruit.create(newFruit);
+    res.redirect("/fruits")
+})
+app.get("/fruits/:fruitId", async (req, res)=>{
+    console.log(req.params.fruitId)
+    const fruitId =req.params.fruitId;
+ 
+    try {
+        const fruit = await Fruit.findById(fruitId);
+            res.render("fruits/show",{
+                fruit,
+            }); 
+    } catch (error) {
+            console.log("Failed to find the fruit");
+            console.log(error);
+    }
+
+    
+    
 })
 //connetions
 app.listen(3000, ()=>{
