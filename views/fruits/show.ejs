@@ -18,5 +18,12 @@
         <div class="index-link-text">Back to Fruits</div>
     </a>
 
+
+    <form action="/fruits/<%= fruit._id%>?_method=DELETE" method="post">
+        <button type="submit">
+            Delete
+        </button>
+    </form>
+
 </body>
 </html>
