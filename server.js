@@ -74,6 +74,19 @@ app.delete("/fruits/:fruitId", async (req, res) =>{
         res.status(500).send("Something went Wrong")
     }
 })
+
+app.put("/fruits/:fruitId", async (req, res) => {
+    try {
+        req.body.isReadyToEat = !!req.body.isReadyToEat
+        const fruitId =  req.params.fruitId;
+        console.log(req.body);
+        const updatedFruit =  await Fruit.findByIdAndUpdate(fruitId, req.body);
+        res.redirect(`/fruits/${fruitId}`)
+    } catch (error) {
+        res.status(500).send("Something went wrong. Try again later")   
+    }
+})
+
 app.get("/fruits/:fruitId", async (req, res)=>{
     // console.log(req.params.fruitId)
     // const fruitId =req.params.fruitId;
@@ -112,6 +125,20 @@ app.get("/fruits/:fruitId", async (req, res)=>{
     }
     
 })
+app.get("/fruits/:fruitId/edit", async  (req, res)=>{
+    try {
+        const fruitId = req.params.fruitId;
+        const fruit =  await Fruit.findById(fruitId);
+        console.log(fruit.isReadyToEat)
+        res.render("fruits/edit.ejs",
+            {fruit}
+        )
+    } catch (error) {
+        res.status(500).send("Something went wrong")
+    }
+})
+
+
 //connetions
 app.listen(3000, ()=>{
     console.log("Server Running on Port 3000")
